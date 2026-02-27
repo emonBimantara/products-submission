@@ -1,28 +1,11 @@
+"use cache"
+
 import { ArrowUpRightIcon, StarIcon } from "lucide-react";
 import SectionHeader from "./section-header";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import ProductCard from "./product-card";
 import { getFeaturedProducts } from "@/lib/products-select";
-
-// const featuredProducts = [
-//     {
-//         id: 1,
-//         name: "ParityKit",
-//         description: "A toolkit for creating parity products",
-//         tags: ["SaaS", "Pricing", "Global"],
-//         votes: 615,
-//         isFeatured: true
-//     },
-//     {
-//         id: 2,
-//         name: "Modern Full Stack Next.JS Course",
-//         description: "Learn to build production-ready full stack apps with Next.JS",
-//         tags: ["Next.JS", "Full-Stack", "Course"],
-//         votes: 124,
-//         isFeatured: false
-//     },
-// ]
 
 export default async function FeaturedProducts() {
     const featuredProducts = await getFeaturedProducts()

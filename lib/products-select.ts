@@ -1,8 +1,23 @@
 import { db } from "@/db"
 import { products } from "@/db/schema"
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
+import { connection } from "next/server";
 
+// get all products that approved
+export async function getAllProducts(){
+    const productsData = await db
+        .select()
+        .from(products)
+        .where(eq(products.status, "approved"))
+        .orderBy(desc(products.voteCount))
+
+    return productsData
+}
+
+// get featured products 
+// "use cache" to enable server-side caching
 export async function getFeaturedProducts() {
+    "use cache"
     const productsData = await db
         .select()
         .from(products)
@@ -11,8 +26,15 @@ export async function getFeaturedProducts() {
     return productsData
 }
 
+// getting list from the fetched featured product but filtering from memory side not db side 
+// dont cache this function
 export async function getRecentlyLaunchedProducts() {
-    const productsData = await getFeaturedProducts()
+    await connection()
+
+    // give 3 seconds delay to give a loading while getting list from the fetched featured product
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+
+    const productsData = await getAllProducts()
     const oneWeekAgo = new Date()
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
 
