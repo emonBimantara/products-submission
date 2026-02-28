@@ -1,7 +1,8 @@
-import { CompassIcon, Divide, HomeIcon, LoaderIcon, SparklesIcon, UserIcon } from "lucide-react";
+import { CompassIcon, HomeIcon, LoaderIcon, SparklesIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import {
+    OrganizationSwitcher,
     SignedIn,
     SignedOut,
     SignInButton,
@@ -9,6 +10,7 @@ import {
     UserButton
 } from "@clerk/nextjs";
 import { Suspense } from "react";
+import CustomUserButton from "./custom-user-button";
 
 const Logo = () => {
     return (
@@ -64,7 +66,7 @@ export default function Header() {
                                         Submit Project
                                     </Link>
                                 </Button>
-                                <UserButton />
+                                <CustomUserButton />
                             </SignedIn>
                         </Suspense>
                     </div>

@@ -1,6 +1,7 @@
 import { db } from "@/db"
 import { products } from "@/db/schema"
 import { desc, eq } from "drizzle-orm";
+import { cacheLife } from "next/cache";
 import { connection } from "next/server";
 
 // get all products that approved
@@ -18,6 +19,9 @@ export async function getAllProducts(){
 // "use cache" to enable server-side caching
 export async function getFeaturedProducts() {
     "use cache"
+
+    cacheLife("minutes") // updating cache every minute
+
     const productsData = await db
         .select()
         .from(products)

@@ -4,26 +4,29 @@ import { auth, currentUser } from "@clerk/nextjs/server"
 import { productSchema } from "./product-validation"
 import { db } from "@/db"
 import { products } from "@/db/schema"
-import z from "zod"
-
-export type FormState = {
-    success: boolean
-    errors?: Record<string, string[]>
-    message: string
-}
+import { z } from "zod"
+import { FormState } from "@/types"
 
 export const addProductAction = async (prevState: FormState, formData: FormData) => {
     console.log(formData)
 
     try {
         // get user ID
-        const { userId } = await auth()
+        const { userId, orgId } = await auth()
 
         if (!userId) {
             return {
                 success: false,
                 errors: {},
                 message: "You must be logged in to submit a product"
+            }
+        }
+
+        if (!orgId) {
+            return {
+                success: false,
+                errors: {},
+                message: "You must be member of an organization to submit a product"
             }
         }
 
@@ -58,6 +61,7 @@ export const addProductAction = async (prevState: FormState, formData: FormData)
             tags: tagsArray,
             status: "pending",
             submittedBy: userEmail,
+            organizationId: orgId,
             userId
         })
 
@@ -78,7 +82,7 @@ export const addProductAction = async (prevState: FormState, formData: FormData)
 
         return {
             success: false,
-            errors: error,
+            errors: {},
             message: "Failed adding product"
         }
     }
